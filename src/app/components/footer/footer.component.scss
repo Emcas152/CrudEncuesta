@@ -1,0 +1,17 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 85%;
+  background-color: #f8f9fe;
+  padding: 1rem 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1030;
+
+  .row {
+    margin: 0;
+  }
+
+  .nav-footer {
+    padding: 0;
+  }
+}

@@ -1,0 +1,126 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+        <div class="col-xl-3 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Conteo de encuestas</h5>
+                    <span class="h2 font-weight-bold mb-0">{{ surveyCount }}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                    <i class="fas fa-chart-bar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <h3 class="mb-0">Encuestas</h3>
+          <div class="text-right">
+            <button id="addSurveyButton" class="btn btn-primary" (click)="openAddSurveyModal()">Agregar encuesta</button>
+
+          </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush" id="survey-table" *ngIf="surveys" >
+              <thead class="thead-light">
+                <tr>
+                <th scope="col">nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Creado en</th>
+                <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let survey of surveys">
+                <td>{{ survey.name }}</td>
+                <td>{{ survey.description }}</td>
+                <td>{{ survey.createdAt | date }}</td>
+                <td>
+                  <button class="btn btn-sm btn-primary" (click)="viewSurvey(survey.id)">Ver</button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteSurvey(survey.id)">Eliminar</button>
+                </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+   <!-- Modal -->
+  <div class="modal fade" id="addSurveyModal" tabindex="-1" role="dialog" aria-labelledby="addSurveyModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSurveyModalLabel">Agregar Encuesta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form role="form" [formGroup]="SurveyForm" autocomplete="off">
+            <div class="form-group">
+              <label for="surveyName">Nombre de la encuesta</label>
+              <input type="text" class="form-control" id="surveyName" formControlName="name" placeholder="Ingrese el nombre de la encuesta" required>
+            </div>
+            <div class="form-group">
+              <label for="surveyAddress">Dirección</label>
+              <textarea class="form-control" id="surveyAddress" formControlName="address" rows="3" placeholder="Ingrese una dirección"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="surveyPhone">Teléfono</label>
+              <input type="text" class="form-control" id="surveyPhone" formControlName="phone" placeholder="Ingrese un número de teléfono" required>
+            </div>
+            <div class="form-group">
+              <label for="surveyNationality">Nacionalidad</label>
+              <textarea class="form-control" id="surveyNationality" formControlName="nationality" rows="3" placeholder="Ingrese una nacionalidad"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="surveyLatitude">Latitud</label>
+              <textarea class="form-control" id="surveyLatitude" formControlName="latitude" rows="3" placeholder="Ingrese una latitud"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="surveyLongitude">Longitud</label>
+              <textarea class="form-control" id="surveyLongitude" formControlName="longitude" rows="3" placeholder="Ingrese una longitud"></textarea>
+            </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-primary" (click)="addSurvey(SurveyForm)">Guardar Encuesta</button>
+
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('#survey-table').DataTable({
+      "language": {
+        "search": "Buscar:",
+        "lengthMenu": "Mostrar _MENU_ registros por página",
+        "zeroRecords": "No se encontraron registros",
+        "info": "Mostrando página _PAGE_ de _PAGES_",
+        "infoEmpty": "No hay registros disponibles",
+        "infoFiltered": "(filtrado de _MAX_ registros totales)"
+      }
+    });
+  });
+</script>
