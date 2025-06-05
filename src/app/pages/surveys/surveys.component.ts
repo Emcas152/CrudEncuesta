@@ -14,7 +14,9 @@ export class SurveysComponent implements OnInit {
   surveyCount: number = 0;
   surveys: Object;
   SurveyForm: FormGroup;
+  SurveyEditForm: FormGroup;
   @ViewChild('addSurveyModal') addSurveyModal: any;
+  @ViewChild('editSurveyModal') editSurveyModal: any;
   @ViewChild('surveyTable') surveyTable: any;
   constructor(
     private http: HttpClient,
@@ -29,8 +31,15 @@ export class SurveysComponent implements OnInit {
       latitude: [''],
       longitude: ['']
     });
-   }
-
+    this.SurveyEditForm = this.fb.group({
+      name: ['', Validators.required],
+      address: [''],
+      phone: ['', Validators.required],
+      nationality: [''],
+      latitude: [''],
+      longitude: ['']
+    });
+  }
 
   ngOnInit() {
     const token = localStorage.getItem('Authorization');
@@ -70,16 +79,33 @@ export class SurveysComponent implements OnInit {
     selectedSurveyId: string | null = null;
 
     openEditSurveyModal(survey: any) {
-      this.selectedSurveyId = survey._id || survey.id;
-      this.SurveyForm.reset(); // Reset the form before patching
-      this.SurveyForm.patchValue({
-        name: survey.name || '',
-        address: survey.address || '',
-        phone: survey.phone || '',
-        nationality: survey.nationality || '',
-        latitude: survey.latitude || '',
-        longitude: survey.longitude || ''
-      });
+      this.selectedSurveyId = survey;
+      this.SurveyEditForm.reset(); // Reset the form before patching
+      const token = localStorage.getItem('Authorization');
+      this.http.get(`http://localhost:3000/api/survey/${this.selectedSurveyId}`, {
+        headers: {
+          'Authorization': `${token}`
+        }
+      }).toPromise()
+        .then((response: any) => {
+          // Ensure only the fields present in the form are patched
+          const formData = {
+            id: response.id || '', // Ensure _id is used if available
+            name: response.name || '',
+            address: response.address || '',
+            phone: response.phone || '',
+            nationality: response.nationality || '',
+            latitude: response.latitude || '',
+            longitude: response.longitude || ''
+          };
+          console.log('Datos de la encuesta para editar:', formData);
+          this.SurveyEditForm.patchValue(formData);
+        })
+        .catch((error) => {
+          console.error('Error al obtener los datos de la encuesta:', error);
+        });
+      // Ensure all properties exist and are not undefined
+
       setTimeout(() => {
         $('#editSurveyModal').modal('show');
       }, 0); // Ensure modal opens after form is patched
@@ -146,9 +172,13 @@ deleteSurvey(surveyId: string) {
 }
   // Método para editar una encuesta
 editSurvey(surveyId: string, form: FormGroup) {
+  console.log('Formulario de edición recibido:', form);
+  console.log('ID de la encuesta a editar:', surveyId);
   if (form.invalid) {
     return;
   }
+  console.log('ID de la encuesta a editar:', surveyId);
+  console.log('Formulario de edición:', form);
   const surveyData = form.value;
   console.log('Datos de la encuesta a editar:', surveyData);
   const token = localStorage.getItem('Authorization');
@@ -161,7 +191,7 @@ editSurvey(surveyId: string, form: FormGroup) {
       (response) => {
         console.log('Encuesta editada exitosamente:', response);
         this.getSurveys(); // Recargar el listado de encuestas
-        this.modalService.dismissAll(); // Cerrar el modal
+        $('#editSurveyModal').modal('hide'); // Cerrar el modal
       },
       (error) => {
         console.error('Error al editar encuesta:', error);

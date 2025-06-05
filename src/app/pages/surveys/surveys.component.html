@@ -127,7 +127,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form role="form" [formGroup]="SurveyForm" autocomplete="off">
+        <form role="form" [formGroup]="SurveyEditForm" autocomplete="off">
+          <input type="text" class="form-control" id="editSurveyId" formControlName="id" hidden>
           <div class="form-group">
             <label for="editSurveyName">Nombre de la encuesta</label>
             <input type="text" class="form-control" id="editSurveyName" formControlName="name" placeholder="Ingrese el nombre de la encuesta" required>
@@ -156,7 +157,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-primary" (click)="editSurvey(selectedSurveyId, SurveyForm)">Guardar Cambios</button>
+        <button type="submit" class="btn btn-primary" (click)="editSurvey(selectedSurveyId, SurveyEditForm)">Guardar Cambios</button>
       </div>
     </div>
   </div>
