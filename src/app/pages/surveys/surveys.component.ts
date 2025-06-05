@@ -67,6 +67,23 @@ export class SurveysComponent implements OnInit {
         console.error('La geolocalización no es soportada por este navegador.');
       }
     }
+    selectedSurveyId: string | null = null;
+
+    openEditSurveyModal(survey: any) {
+      this.selectedSurveyId = survey._id || survey.id;
+      this.SurveyForm.reset(); // Reset the form before patching
+      this.SurveyForm.patchValue({
+        name: survey.name || '',
+        address: survey.address || '',
+        phone: survey.phone || '',
+        nationality: survey.nationality || '',
+        latitude: survey.latitude || '',
+        longitude: survey.longitude || ''
+      });
+      setTimeout(() => {
+        $('#editSurveyModal').modal('show');
+      }, 0); // Ensure modal opens after form is patched
+    }
     // Método para obtener el listado de encuestas
   getSurveys() {
     const token = localStorage.getItem('Authorization');
@@ -102,7 +119,7 @@ export class SurveysComponent implements OnInit {
         (response) => {
           console.log('Encuesta creada exitosamente:', response);
           this.getSurveys(); // Recargar el listado de encuestas
-          this.modalService.dismissAll(); // Cerrar el modal
+          $('#addSurveyModal').modal('hide'); // Cerrar el modal
         },
         (error) => {
           console.error('Error al agregar encuesta:', error);

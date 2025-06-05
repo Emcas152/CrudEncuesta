@@ -42,18 +42,24 @@
               <thead class="thead-light">
                 <tr>
                 <th scope="col">nombre</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Creado en</th>
+                <th scope="col">Direccion</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Nacionalidad</th>
+                <th scope="col">Latitud</th>
+                <th scope="col">Longitud</th>
                 <th scope="col">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let survey of surveys">
                 <td>{{ survey.name }}</td>
-                <td>{{ survey.description }}</td>
-                <td>{{ survey.createdAt | date }}</td>
+                <td>{{ survey.address }}</td>
+                <td>{{ survey.phone }}</td>
+                <td>{{ survey.nationality }}</td>
+                <td>{{ survey.latitude }}</td>
+                <td>{{ survey.longitude }}</td>
                 <td>
-                  <button class="btn btn-sm btn-primary" (click)="viewSurvey(survey.id)">Ver</button>
+                  <button class="btn btn-sm btn-primary" (click)="openEditSurveyModal(survey.id)">Ver</button>
                   <button class="btn btn-sm btn-danger" (click)="deleteSurvey(survey.id)">Eliminar</button>
                 </td>
                 </tr>
@@ -106,6 +112,51 @@
             <button type="submit" class="btn btn-primary" (click)="addSurvey(SurveyForm)">Guardar Encuesta</button>
 
           </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit Survey Modal -->
+<div class="modal fade" id="editSurveyModal" tabindex="-1" role="dialog" aria-labelledby="editSurveyModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSurveyModalLabel">Editar Encuesta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" [formGroup]="SurveyForm" autocomplete="off">
+          <div class="form-group">
+            <label for="editSurveyName">Nombre de la encuesta</label>
+            <input type="text" class="form-control" id="editSurveyName" formControlName="name" placeholder="Ingrese el nombre de la encuesta" required>
+          </div>
+          <div class="form-group">
+            <label for="editSurveyAddress">Dirección</label>
+            <textarea class="form-control" id="editSurveyAddress" formControlName="address" rows="3" placeholder="Ingrese una dirección"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editSurveyPhone">Teléfono</label>
+            <input type="text" class="form-control" id="editSurveyPhone" formControlName="phone" placeholder="Ingrese un número de teléfono" required>
+          </div>
+          <div class="form-group">
+            <label for="editSurveyNationality">Nacionalidad</label>
+            <textarea class="form-control" id="editSurveyNationality" formControlName="nationality" rows="3" placeholder="Ingrese una nacionalidad"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editSurveyLatitude">Latitud</label>
+            <textarea class="form-control" id="editSurveyLatitude" formControlName="latitude" rows="3" placeholder="Ingrese una latitud"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editSurveyLongitude">Longitud</label>
+            <textarea class="form-control" id="editSurveyLongitude" formControlName="longitude" rows="3" placeholder="Ingrese una longitud"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary" (click)="editSurvey(selectedSurveyId, SurveyForm)">Guardar Cambios</button>
       </div>
     </div>
   </div>
